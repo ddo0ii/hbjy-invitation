@@ -141,11 +141,19 @@ app.post('/api/snaps', limit(15, 60), async (c, next) => {
   }
 });
 app.all('/api/*', c => c.json({ error: '요청한 경로를 찾을 수 없습니다.' }, 404));
+app.get('/admin/', c => c.redirect('/admin', 308));
 app.all('*', async c => {
-  const response = await c.env.ASSETS.fetch(c.req.raw as unknown as Parameters<Fetcher['fetch']>[0]);
+  // 관리자 화면은 청첩장과 같은 React 진입 문서를 사용합니다.
+  // 배포 환경의 정적 파일 검색에 /admin 파일을 요청하지 않도록 명시적으로 연결합니다.
+  const assetRequest = c.req.path === '/admin'
+    ? new Request(new URL('/', c.req.url), c.req.raw)
+    : c.req.raw;
+  const response = await c.env.ASSETS.fetch(assetRequest as unknown as Parameters<Fetcher['fetch']>[0]);
   if (response.headers.get('Content-Type')?.includes('text/html')) {
     const html = (await response.text()).replace('content="/images/share-card.png"', `content="${new URL('/images/share-card.png', c.env.SITE_URL).href}"`).replace('</head>', `<meta property="og:url" content="${new URL('/', c.env.SITE_URL).href}" /></head>`);
-    return new Response(html, { status: response.status, headers: Object.fromEntries(response.headers.entries()) });
+    const headers = new Headers(Object.fromEntries(response.headers.entries()));
+    if (c.req.path === '/admin') headers.set('Cache-Control', 'no-store');
+    return new Response(html, { status: response.status, headers });
   }
   return response as unknown as Response;
 });
