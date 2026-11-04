@@ -8,21 +8,28 @@
   },
   "scripts": {
     "dev": "tsx watch --clear-screen=false server/index.ts",
-    "build": "tsc --noEmit && vite build && esbuild server/index.ts --bundle --platform=node --format=esm --packages=external --outfile=dist-server/index.js",
+    "build": "tsc --noEmit && vite build --mode sites && esbuild server/index.ts --bundle --platform=node --format=esm --packages=external --outfile=dist-server/index.js",
+    "db:generate": "drizzle-kit generate",
+    "preview:sites": "wrangler dev --config dist/server/wrangler.json --env-file .dev.vars --local --persist-to .wrangler/state --ip 127.0.0.1 --port 4173 --inspector-port 0",
     "start": "node dist-server/index.js",
     "check": "tsc --noEmit",
     "test": "tsx --test tests/*.test.ts",
     "setup": "node scripts/setup.mjs",
     "assets": "node scripts/generate-music.mjs",
-    "photos": "tsx scripts/prepare-photos.ts"
+    "photos": "tsx scripts/prepare-photos.ts",
+    "test:worker": "tsx tests/verify-worker.ts"
   },
   "dependencies": {
+    "@cf-wasm/photon": "^0.4.0",
     "@fontsource/cormorant-garamond": "^5.3.0",
     "@fontsource/gowun-dodum": "^5.3.0",
     "dotenv": "^17.2.3",
+    "drizzle-orm": "^0.45.4",
     "express": "^5.3.0",
     "express-rate-limit": "^8.2.1",
     "helmet": "^8.1.0",
+    "hono": "^4.13.16",
+    "image-size": "^2.0.4",
     "lucide-react": "^0.577.0",
     "multer": "^2.1.1",
     "react": "^19.3.1",
@@ -32,16 +39,20 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
+    "@cloudflare/vite-plugin": "^1.67.0",
+    "@cloudflare/workers-types": "^5.20261104.1",
     "@types/express": "^5.0.6",
     "@types/multer": "^2.0.0",
     "@types/node": "^24.10.0",
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
     "@vitejs/plugin-react": "^6.2.1",
+    "drizzle-kit": "^0.31.11",
     "esbuild": "^0.28.2",
     "fflate": "^0.8.3",
     "tsx": "^4.21.0",
     "typescript": "^7.0.2",
-    "vite": "^8.3.5"
+    "vite": "^8.3.5",
+    "wrangler": "^4.157.0"
   }
 }

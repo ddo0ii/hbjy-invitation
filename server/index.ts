@@ -18,8 +18,8 @@ const server = createHttpServer(app);
 const htmlMetadata = (html: string) => html.replace('content="/images/share-card.png"', `content="${new URL('/images/share-card.png', siteUrl).href}"`).replace('</head>', `<meta property="og:url" content="${new URL(siteUrl).href}" /></head>`);
 
 if (production) {
-  app.use(express.static(resolve('dist'), { index: false, maxAge: '1h' }));
-  app.get('/{*path}', async (_req, res) => { res.type('html').send(htmlMetadata(await readFile(resolve('dist/index.html'), 'utf8'))); });
+  app.use(express.static(resolve('dist/client'), { index: false, maxAge: '1h' }));
+  app.get('/{*path}', async (_req, res) => { res.type('html').send(htmlMetadata(await readFile(resolve('dist/client/index.html'), 'utf8'))); });
 } else {
   const { createServer } = await import('vite');
   const vite = await createServer({ server: { middlewareMode: true, hmr: { server } }, appType: 'custom' });

@@ -3,6 +3,7 @@ import { Camera, Check, LoaderCircle, Upload, X } from 'lucide-react';
 import { Dialog } from './components.tsx';
 import { api } from './api.ts';
 import type { SnapStatus } from '../shared/contracts.ts';
+import { prepareSnapshot } from './prepare-snapshot.ts';
 
 export function SnapDialog({ status, onClose, onUploaded }: { status: SnapStatus; onClose: () => void; onUploaded: () => void }) {
   const [files, setFiles] = useState<File[]>([]);
@@ -16,9 +17,8 @@ export function SnapDialog({ status, onClose, onUploaded }: { status: SnapStatus
     if (!files.length) { setError('함께 나눌 사진을 선택해 주세요.'); return; }
     const body = new FormData(event.currentTarget);
     body.delete('photos'); body.set('consent', 'true');
-    for (const file of files) body.append('photos', file);
     setBusy(true); setError('');
-    try { const result = await api<{ message: string }>('/api/snaps', { method: 'POST', body }); setSuccess(result.message); onUploaded(); }
+    try { for (const file of files) body.append('photos', await prepareSnapshot(file)); const result = await api<{ message: string }>('/api/snaps', { method: 'POST', body }); setSuccess(result.message); onUploaded(); }
     catch (error) { setError(error instanceof Error ? error.message : '사진을 전달하지 못했습니다.'); }
     finally { setBusy(false); }
   }

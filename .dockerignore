@@ -8,3 +8,9 @@ data
 photo-originals
 test-results
 *.log
+.wrangler
+.sites-runtime
+.sites-checkout
+outputs
+.dev.vars
+.dev.vars.*

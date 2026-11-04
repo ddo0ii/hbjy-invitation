@@ -2,6 +2,8 @@
 
 2027년 2월 20일 토요일 오후 12시 30분, HD현대글로벌R&D센터 아산홀.
 
+청첩장 주소: [현범과 주영의 청첩장](https://hyunbum-juyoung-2027.kkang8877.chatgpt.site) · 로그인 없이 열람
+
 소스 저장소: [ddo0ii/hbjy-invitation](https://github.com/ddo0ii/hbjy-invitation) · 비공개
 
 기존 [명준·소영 청첩장](https://ddo0ii.github.io/invitation/)의 세로 흐름을 참고해 새로 구성했습니다. 크림 화이트, 블루, 버터 옐로, 작은 꽃 일러스트로 밝고 단정한 분위기를 만들었습니다. 임시 사진 영역은 직접 만든 일러스트이며 실제 신랑·신부 사진으로 교체할 수 있습니다.
@@ -111,6 +113,16 @@ DB와 사진 폴더는 공개 정적 파일 경로에서 분리되어 있습니�
 구현 기준: [카카오 공유 문서](https://developers.kakao.com/docs/ko/kakaotalk-share/js-link), [카카오내비 문서](https://developers.kakao.com/docs/ko/kakaonavi/js), [카카오맵 URL 문서](https://apis.map.kakao.com/web/guide/).
 
 ## 배포
+
+운영 사이트는 Sites의 Cloudflare Worker에서 실행합니다. 참석 응답과 관리자 세션은 D1에, 현장 사진은 비공개 R2에 보관합니다. 로컬 SQLite 파일을 운영 서버에 올리지 않으며, 로컬 PC를 꺼도 운영 데이터는 유지됩니다. 관리자 비밀번호는 기존 `.env`의 `ADMIN_PASSWORD`와 같고, 배포 환경에는 SHA-256 해시만 비밀값으로 등록합니다.
+
+배포 서버 코드는 `worker/`, D1 스키마는 `db/schema.ts`, 적용 이력은 `drizzle/`에 있습니다. Sites 프로젝트 설정은 `.openai/hosting.json`에 있으며 비밀값은 포함하지 않습니다. 로컬 Node 서버와 운영 Worker는 동일한 입력 검증·엑셀 생성 코드를 사용합니다.
+
+현장 사진은 업로드 전 브라우저에서 회전을 반영해 최대 2,048px WEBP로 변환하고, 운영 서버에서도 실제 이미지 디코딩·재인코딩으로 위치 정보를 제거합니다. 운영 서버는 2월 20일 전 업로드를 차단합니다.
+
+변경 후 `npm run build`로 빌드하고 Sites 스킬의 소스 저장·게시 절차를 따릅니다. GitHub에 푸시하는 것만으로 자동 배포되지는 않습니다.
+
+### Node 서버 또는 Docker로 직접 운영할 때
 
 소스는 GitHub 비공개 저장소에 보관합니다. GitHub 소스 업로드와 실제 웹서비스 배포는 별도입니다. 서버 DB와 사진 업로드가 있으므로 이 프로젝트를 GitHub Pages에 정적 파일만 올리면 저장 기능을 사용할 수 없습니다. Node.js 서버와 영구 디스크가 있는 환경에서 실행해야 합니다.
 
