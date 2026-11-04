@@ -1,0 +1,10 @@
+node_modules
+dist
+dist-server
+data
+.env
+.env.*
+.git
+photo-originals
+test-results
+*.log

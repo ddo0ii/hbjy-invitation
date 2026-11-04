@@ -1,0 +1,26 @@
+services:
+  invitation:
+    build:
+      context: .
+      args:
+        VITE_KAKAO_JAVASCRIPT_KEY: ${VITE_KAKAO_JAVASCRIPT_KEY:-}
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:3000:3000"
+    environment:
+      NODE_ENV: production
+      HOST: 0.0.0.0
+      PORT: 3000
+      SITE_URL: ${SITE_URL:?실제 서비스 주소를 설정해 주세요}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:?관리자 비밀번호를 설정해 주세요}
+      DATA_DIR: /app/data
+      TRUST_PROXY_HOPS: ${TRUST_PROXY_HOPS:-0}
+    volumes:
+      - invitation-data:/app/data
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/api/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+volumes:
+  invitation-data:
