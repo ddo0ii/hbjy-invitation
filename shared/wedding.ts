@@ -11,7 +11,7 @@ export const wedding = {
   groom: { name: '조현범', shortName: '현범', english: 'CHO HYUNBUM', father: '조성진', mother: '이진용', order: '장남' },
   bride: { name: '권주영', shortName: '주영', english: 'GWON JUYOUNG', father: '권용덕', mother: '이선애', order: '차녀' },
   venue: { name: 'HD현대글로벌R&D센터', hall: '아산홀', address: '경기 성남시 분당구 분당수서로 477', mapImage: '', coordinates: { latitude: 37.3769302, longitude: 127.1061108 } },
-  greeting: ['함께 있으면 더 즐거운 두 사람이', '이제 같은 일상을 시작합니다.', '', '저희의 새로운 시작에 함께해 주세요.', '반가운 마음으로 기다리겠습니다.'],
+  greeting: ['서로를 아끼며 함께할 날들을 약속합니다.', '', '저희의 새로운 시작에 함께하시어', '자리를 빛내 주시면 감사하겠습니다.'],
   heroPhoto: '',
   heroPhotoPosition: 'center 45%',
   closingPhoto: '',
@@ -20,8 +20,8 @@ export const wedding = {
   // 한 행에 2장 → 3장 → 2장 순서입니다. 처음에는 정확히 세 행을 보여줍니다.
   gallery: Array.from({ length: 14 }, (_, i): GalleryPhoto => ({ src: '', alt: `현범과 주영의 웨딩 사진 ${i + 1}` })),
   rsvp: {
-    groom: { title: '현범의 소중한 분께', description: '함께해 주실 마음을 신랑 현범에게 전할게요. 편안하고 즐겁게 모실 수 있도록 아래 내용을 남겨 주세요.' },
-    bride: { title: '주영의 소중한 분께', description: '함께해 주실 마음을 신부 주영에게 전할게요. 반갑게 맞이할 수 있도록 아래 내용을 남겨 주세요.' },
+    groom: { title: '신랑 조현범 측 하객 안내', description: '신랑측 참석 정보를 남겨 주시면 예식 전 확인 연락을 드리겠습니다. 정성껏 모실 수 있도록 아래 내용을 작성해 주세요.' },
+    bride: { title: '신부 권주영 측 하객 안내', description: '신부측 참석 정보를 남겨 주시면 예식 전 확인 연락을 드리겠습니다. 정성껏 모실 수 있도록 아래 내용을 작성해 주세요.' },
   },
   transport: {
     subway: ['수인분당선 수내역 4번 출구', '수인분당선 정자역 6번 출구', '각 출구에서 예식장 셔틀버스를 이용하실 수 있습니다.'],
